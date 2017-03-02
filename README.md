@@ -2,6 +2,87 @@
 
 fastText is a library for efficient learning of word representations and sentence classification.
 
+## Running fastText in FloydHub
+[FloydHub](https://www.floydhub.com) is a PaaS for training and deploying your deep learning models in the cloud. Here are the steps to run fastText in Floyd.
+
+### Signup on FloydHub
+Click [here](https://www.floydhub.com) to signup for an account. Follow the steps to install the `floyd-cli` and login on your terminal
+
+### Create a Training Dataset
+For example
+```
+$ mkdir traindata
+$ cd traindata
+$ wget -O mytrainingdata.txt https://raw.githubusercontent.com/dennybritz/cnn-text-classification-tf/master/data/rt-polaritydata/rt-polarity.pos
+```
+
+The first step is to upload your data to Floyd's servers. See [docs](http://docs.floydhub.com/home/using_datasets/)
+```
+$ floyd data init ftTrainData
+Data source "ftTrainData" initialized in current directory
+
+$ floyd data upload
+
+Creating data source. Total upload size: 611.7KiB
+Uploading files ...
+Upload finished
+DATA ID                 NAME                    VERSION
+----------------------  --------------------  ---------
+L7jmn5HVYKSfJbANsYKMmD  floyd_demo/ftTrainData:1          1
+```
+Your data is now uploaded to the cloud and available to use in your jobs. Make note of the **DATA_ID** (in this example, `L7jmn5HVYKSfJbANsYKMmD`). You can view your uploaded data in your browser using `floyd data output <DATA_ID>`
+
+*P.S*: You can continue to change your data locally and run `floyd data upload`. This will create new versions of your `ftTrainData` dataset.
+
+### Training your fastText Word Representation
+We will clone the fastText Github repo and initialize a local project
+```
+$ git clone https://github.com/facebookresearch/fastText.git
+$ cd fastText
+$ floyd init fastText
+Project "fastText" initialized in current directory
+```
+
+Let us run our first training. 
+```
+$ floyd run --data <DATA_ID> "make && ./fasttext skipgram -input /input/mytrainingdata.txt -output /output/model"
+
+Creating project run. Total upload size: 421.0B
+Syncing code ...
+RUN ID                  NAME                VERSION
+----------------------  ----------------  ---------
+pDmQjgKW2hLBHKZQHhQvaa  floyd_demo/fastText:1          1
+
+To view logs enter:
+    floyd logs pDmQjgKW2hLBHKZQHhQvaa
+```
+What happens behind the scenes:
+- Your code is uploaded to the server
+- A new machine is provisioned and initialized with [this](https://hub.docker.com/r/floydhub/tensorflow/) Docker image.
+- The command provided (`make && ./fastText ...`) is executed inside this container.
+- The dataset you created in step 1 is mounted into your container by using the `--data <DATA_ID>` flag. Any mounted data is available under `/input`. For example, in our example, the code has access to the training data at `/input/mytrainingdata.txt`
+- Any files written to `/output` directory will be saved after your job completes. In this example, we will have `/output/model.bin` and `/output/model.vec` in our output
+
+Make a note of your **RUN_ID** (in this example, pDmQjgKW2hLBHKZQHhQvaa)
+
+You can view the logs of your job run using
+```
+floyd logs <RUN_ID> -t
+
+2017-03-02 12:09:17,446 INFO - Read 0M words
+2017-03-02 12:09:17,518 INFO - Number of words:  2529
+2017-03-02 12:09:17,622 INFO - Number of labels: 0
+2017-03-02 12:09:27,870 INFO - Progress: 2.6% 
+```
+
+Once the training is complete, you can view the generated output (model and word vector) in your browser using
+```
+floyd output <RUN_ID>
+```
+
+*P.S*: You can continue to make changes to your code locally, and each `floyd run` command will sync your latest changes to the server and run it.
+
+
 ## Requirements
 
 **fastText** builds on modern Mac OS and Linux distributions.
