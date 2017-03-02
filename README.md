@@ -62,6 +62,7 @@ What happens behind the scenes:
 - The command provided (`make && ./fastText ...`) is executed inside this container.
 - The dataset you created in step 1 is mounted into your container by using the `--data <DATA_ID>` flag. Any mounted data is available under `/input`. For example, in our example, the code has access to the training data at `/input/mytrainingdata.txt`
 - Any files written to `/output` directory will be saved after your job completes. In this example, we will have `/output/model.bin` and `/output/model.vec` in our output
+- Your instance is powered off
 
 Make a note of your **RUN_ID** (in this example, pDmQjgKW2hLBHKZQHhQvaa)
 
