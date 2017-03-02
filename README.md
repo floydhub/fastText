@@ -16,7 +16,7 @@ $ cd traindata
 $ wget -O mytrainingdata.txt https://raw.githubusercontent.com/dennybritz/cnn-text-classification-tf/master/data/rt-polaritydata/rt-polarity.pos
 ```
 
-The first step is to upload your data to Floyd's servers. See [docs](http://docs.floydhub.com/home/using_datasets/)
+The first step is to upload your data to Floyd's servers. See [example](http://docs.floydhub.com/home/using_datasets/) and [docs](http://docs.floydhub.com/commands/data/)
 ```
 $ floyd data init ftTrainData
 Data source "ftTrainData" initialized in current directory
@@ -35,7 +35,7 @@ Your data is now uploaded to the cloud and available to use in your jobs. Make n
 *P.S*: You can continue to change your data locally and run `floyd data upload`. This will create new versions of your `ftTrainData` dataset.
 
 ### Training your fastText Word Representation
-We will clone the fastText Github repo and initialize a local project
+We will clone the fastText Github repo and initialize a local project ([docs](http://docs.floydhub.com/commands/init/))
 ```
 $ git clone https://github.com/facebookresearch/fastText.git
 $ cd fastText
@@ -43,7 +43,7 @@ $ floyd init fastText
 Project "fastText" initialized in current directory
 ```
 
-Let us run our first training. 
+Let us run our first training ([docs](http://docs.floydhub.com/commands/run/))
 ```
 $ floyd run --data <DATA_ID> "make && ./fasttext skipgram -input /input/mytrainingdata.txt -output /output/model"
 
@@ -66,7 +66,7 @@ What happens behind the scenes:
 
 Make a note of your **RUN_ID** (in this example, pDmQjgKW2hLBHKZQHhQvaa)
 
-You can view the logs of your job run using
+You can view the logs of your job run ([docs](http://docs.floydhub.com/commands/logs/))
 ```
 floyd logs <RUN_ID> -t
 
@@ -76,7 +76,7 @@ floyd logs <RUN_ID> -t
 2017-03-02 12:09:27,870 INFO - Progress: 2.6% 
 ```
 
-Once the training is complete, you can view the generated output (model and word vector) in your browser using
+Once the training is complete, you can view the generated output (model and word vector) in your browser ([docs](http://docs.floydhub.com/commands/output/))
 ```
 floyd output <RUN_ID>
 ```
