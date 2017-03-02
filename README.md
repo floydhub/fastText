@@ -64,7 +64,7 @@ What happens behind the scenes:
 - Any files written to `/output` directory will be saved after your job completes. In this example, we will have `/output/model.bin` and `/output/model.vec` in our output
 - Your instance is powered off
 
-Make a note of your **RUN_ID** (in this example, pDmQjgKW2hLBHKZQHhQvaa)
+Make a note of your **RUN_ID** (in this example, `pDmQjgKW2hLBHKZQHhQvaa`)
 
 You can view the logs of your job run ([docs](http://docs.floydhub.com/commands/logs/))
 ```
